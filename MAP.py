@@ -8,20 +8,11 @@ import time
 
 #########################################################################################
 # Load data
-st.title('covid_19_clean_complete')
+st.title('Argo Floats Across the World')
 
 
-DATA_URL = ('c:/Users/jonpg/OneDrive/Documents/School/Math 553/ocean_climate/all_ocean_data.csv')
-@st.cache(allow_output_mutation=True)
+DATA_URL = ('c:/Users/jon/Documents/School/Math 553/ocean_climate/data_for_map.csv')
 
-def load_data():
-    data = pd.read_csv(DATA_URL)
-    data['date'] = pd.to_datetime(data['date']).dt.strftime('%Y-%m-%d')
-    data = data.sort_values(by=['date'], ascending=[True])
-    return data
-
-# Load rows of data into the dataframe.
-df = load_data()
 # st.write(df)
 ############################################################################################
 
@@ -71,9 +62,10 @@ df = load_data()
 
 ########################################################################################
 ### SELECTBOX widgets
-metrics =['q0_psal']#['total_cases','new_cases','total_deaths','new_deaths','total_cases_per_million','new_cases_per_million','total_deaths_per_million','new_deaths_per_million','total_tests','new_tests','total_tests_per_thousand','new_tests_per_thousand']
+metrics = [2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024]
+#['total_cases','new_cases','total_deaths','new_deaths','total_cases_per_million','new_cases_per_million','total_deaths_per_million','new_deaths_per_million','total_tests','new_tests','total_tests_per_thousand','new_tests_per_thousand']
 
-cols = st.selectbox('Covid metric to view', metrics)
+cols = st.selectbox('Choose a year', metrics)
 
 # let's ask the user which column should be used as Index
 if cols in metrics:   
@@ -81,9 +73,20 @@ if cols in metrics:
 
 ########################################################################################
 ## MAP
+@st.cache_data
 
+def load_data(date):
+    data = pd.read_csv(DATA_URL)
+    data['date'] = pd.to_datetime(data['date'], errors='coerce').dt.strftime('%Y-%m-%d')
+    data = data[data['date'].str[:4]==str(date)]
+    data = data.dropna()
+    data = data.sort_values(by=['date'], ascending=[True])
+    return data
+
+# Load rows of data into the dataframe.
+df = load_data(metric_to_show_in_covid_Layer)
 # Variable for date picker, default to Jan 1st 2020
-date_index = list(df['date'].unique())
+date_index = list(df[df['date'].str[:4]==str(metric_to_show_in_covid_Layer)]['date'].unique())
 
 # Set viewport for the deckgl map
 view = pdk.ViewState(latitude=0, longitude=0, zoom=0.2,)
@@ -123,7 +126,7 @@ subheading = st.subheader("")
 # Render the deck.gl map in the Streamlit app as a Pydeck chart 
 map = st.pydeck_chart(r)
 
-day_range = 100
+day_range = 10
 
 running_list = date_index[:day_range]
 # Update the maps and the subheading each day for 90 days
@@ -139,7 +142,7 @@ for i in date_index[day_range:]:
     map.pydeck_chart(r)
 
     # Update the heading with current date
-    subheading.subheader("%s on : %s" % (metric_to_show_in_covid_Layer, i))
+    subheading.subheader("Date: %s" % (i))
     temp = running_list[1:]
     temp.append(i)
     running_list = temp
