@@ -9,9 +9,9 @@ import time
 #########################################################################################
 # Load data
 st.title('Argo Floats Across the World')
+#c:/Users/jonpg/onedrive/Documents/School/Math 553/ocean_climate/
 
-
-DATA_URL = ('c:/Users/jon/Documents/School/Math 553/ocean_climate/data_for_map.csv')
+DATA_URL = ('data_for_map.csv')
 
 # st.write(df)
 ############################################################################################
@@ -62,7 +62,7 @@ DATA_URL = ('c:/Users/jon/Documents/School/Math 553/ocean_climate/data_for_map.c
 
 ########################################################################################
 ### SELECTBOX widgets
-metrics = [2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024]
+metrics = [2023]#[2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024]
 #['total_cases','new_cases','total_deaths','new_deaths','total_cases_per_million','new_cases_per_million','total_deaths_per_million','new_deaths_per_million','total_tests','new_tests','total_tests_per_thousand','new_tests_per_thousand']
 
 cols = st.selectbox('Choose a year', metrics)
