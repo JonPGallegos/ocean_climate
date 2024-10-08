@@ -11,7 +11,7 @@ import time
 st.title('Argo Floats Across the World')
 
 
-DATA_URL = ('c:/Users/Jon/Documents/School/Math 553/ocean_climate/lstm_data.csv')
+DATA_URL = ('c:/Users/jonpg/OneDrive/Documents/School/Math 553/ocean_climate/lstm_for_map.csv')
 
 # st.write(df)
 ############################################################################################
@@ -62,26 +62,29 @@ DATA_URL = ('c:/Users/Jon/Documents/School/Math 553/ocean_climate/lstm_data.csv'
 
 ########################################################################################
 ### SELECTBOX widgets
-metrics = ['all']
+metrics = ['Stable', 'Less Stable', 'Unstable', 'Very Unstable']
 #['total_cases','new_cases','total_deaths','new_deaths','total_cases_per_million','new_cases_per_million','total_deaths_per_million','new_deaths_per_million','total_tests','new_tests','total_tests_per_thousand','new_tests_per_thousand']
 
-cols = st.selectbox('Choose a year', metrics)
+cols = st.selectbox('Select stability', metrics)
 
 # let's ask the user which column should be used as Index
 if cols in metrics:   
-    metric_to_show_in_covid_Layer = cols  
+    metric_to_show = cols  
+
+stability_index = {'Stable':(1,0), 'Less Stable':(5000,300000), 'Unstable':(10000,500000), 'Very Unstable':(15000, 650000)}
+
 
 ########################################################################################
 ## MAP
 @st.cache_data
 
-def load_data(date):
+def load_data():
     data = pd.read_csv(DATA_URL)
     
     return data
 
 # Load rows of data into the dataframe.
-df = load_data(metric_to_show_in_covid_Layer)
+df = load_data()
 # Variable for date picker, default to Jan 1st 2020
 
 # Set viewport for the deckgl map
@@ -100,7 +103,7 @@ covidLayer = pdk.Layer(
         radius_max_pixels=60,
         line_width_min_pixels=1,
         get_position=["longitude", "latitude"],
-        get_radius=metric_to_show_in_covid_Layer,
+        get_radius=metric_to_show,
         get_fill_color=[252, 136, 3],
         get_line_color=[255,0,0],
         tooltip="test test",
@@ -124,12 +127,13 @@ map = st.pydeck_chart(r)
 
 index_range = 10
 index = df.index.tolist()
-running_list = index[:index_range]
+table, act_start = stability_index[metric_to_show]
+running_list = index[table:table+index_range]
 # Update the maps and the subheading each day for 90 days
-for i in index[index_range:]:
+for i in index[table:]:
     
     # Update data in map layers
-    covidLayer.data = df.iloc[running_list]
+    covidLayer.data = df.loc[running_list]
 
     # Update the deck.gl map
     #r.update()
@@ -138,9 +142,10 @@ for i in index[index_range:]:
     map.pydeck_chart(r)
 
     # Update the heading with current date
-    subheading.subheader("Date: %s" % (i))
+    subheading.subheader("Current Table Row Number: %s out of 681,540" % (act_start))
     temp_list = running_list[1:]
     temp_list.append(i)
     running_list = temp_list
+    act_start+=1
     # wait 0.1 second before go onto next day
     time.sleep(0.05)
