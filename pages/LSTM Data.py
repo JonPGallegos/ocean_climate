@@ -15,13 +15,13 @@ st.set_page_config(
 )
 st.title('Plotting what is used in the LSTM Model')
 
-DATA_URL = 'lstm_for_map.csv'
+DATA_URL = './lstm_for_map.csv'
 
-# st.write(df)
+# st.write(df_lstm)
 ############################################################################################
 
 # bar chart 
-# filter_data = df[(df['date'] >='2020-04-01') & (df['Country']== 'Australia')].set_index("date")
+# filter_data = df_lstm[(df_lstm['date'] >='2020-04-01') & (df_lstm['Country']== 'Australia')].set_index("date")
 
 # st.markdown( "Australia daily Death cases from 1st April 2020")
 
@@ -30,16 +30,16 @@ DATA_URL = 'lstm_for_map.csv'
 
 ########################################################################################
     #   WIDGETS
-# subset_data = df
+# subset_data = df_lstm
 
 # ### MULTISELECT
 # country_name_input = st.multiselect(
 # 'Country name',
-# df.groupby('Country').count().reset_index()['Country'].tolist())
+# df_lstm.groupby('Country').count().reset_index()['Country'].tolist())
 
 # # by country name
 # if len(country_name_input) > 0:
-#     subset_data = df[df['Country'].isin(country_name_input)]
+#     subset_data = df_lstm[df_lstm['Country'].isin(country_name_input)]
   
 ########################################################################################
 ## linechart
@@ -80,7 +80,7 @@ stability_index = {'Stable':(1,0), 'Less Stable':(5000,300000), 'Unstable':(1000
 
 ########################################################################################
 ## MAP
-@st.cache_data
+# @st.cache_data
 
 def load_data():
     data = pd.read_csv(DATA_URL)
@@ -88,7 +88,7 @@ def load_data():
     return data
 
 # Load rows of data into the dataframe.
-df = load_data()
+df_lstm = load_data()
 # Variable for date picker, default to Jan 1st 2020
 
 # Set viewport for the deckgl map
@@ -97,7 +97,7 @@ view = pdk.ViewState(latitude=0, longitude=0, zoom=0.2,)
 # Create the scatter plot layer
 covidLayer = pdk.Layer(
         "ScatterplotLayer",
-        data=df,
+        data=df_lstm,
         pickable=False,
         opacity=0.3,
         stroked=True,
@@ -130,14 +130,14 @@ subheading = st.subheader("")
 map = st.pydeck_chart(r)
 
 index_range = 10
-index = df.index.tolist()
+index = df_lstm.index.tolist()
 table, act_start = stability_index[metric_to_show]
 running_list = index[table:table+index_range]
 # Update the maps and the subheading each day for 90 days
 for i in index[table:]:
     
     # Update data in map layers
-    covidLayer.data = df.loc[running_list]
+    covidLayer.data = df_lstm.loc[running_list]
 
     # Update the deck.gl map
     #r.update()
