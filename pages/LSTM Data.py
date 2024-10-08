@@ -15,7 +15,7 @@ st.set_page_config(
 )
 st.title('Plotting what is used in the LSTM Model')
 
-DATA_URL = '../lstm_for_map.csv'
+DATA_URL = 'c:/Users/jonpg/OneDrive/Documents/School/Math 553/ocean_climate/pages/lstm_for_map.csv'
 
 # st.write(df_lstm)
 ############################################################################################
