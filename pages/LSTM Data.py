@@ -15,7 +15,7 @@ st.set_page_config(
 )
 st.title('Plotting what is used in the LSTM Model')
 
-DATA_URL = ('../pages/lstm_for_map.csv')
+DATA_URL = ('../lstm_for_map.csv')
 
 # st.write(df)
 ############################################################################################
