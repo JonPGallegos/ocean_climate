@@ -82,13 +82,13 @@ stability_index = {'Stable':(1,0), 'Less Stable':(5000,300000), 'Unstable':(1000
 ## MAP
 # @st.cache_data
 
-def load_data():
+def load_data_lstm():
     data = pd.read_csv(DATA_URL)
     
     return data
 
 # Load rows of data into the dataframe.
-df_lstm = load_data()
+df_lstm = load_data_lstm()
 # Variable for date picker, default to Jan 1st 2020
 
 # Set viewport for the deckgl map
