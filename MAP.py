@@ -5,6 +5,8 @@ import pydeck as pdk
 import altair as alt
 import datetime
 import time
+import sys
+import path
 
 #########################################################################################
 # Load data
@@ -12,12 +14,13 @@ st.set_page_config(
     page_title="Map",
     page_icon="👋",
 )
-
+dir = path.Path(__file__).abspath()
+sys.append.path(dir.parent.parent)
 
 st.title('Argo Floats Across the World')
 #c:/Users/jonpg/onedrive/Documents/School/Math 553/ocean_climate/
 
-DATA_URL = '../data_for_map_2023.csv'
+DATA_URL = './data_for_map_2023.csv'
 
 # st.write(df)
 ############################################################################################

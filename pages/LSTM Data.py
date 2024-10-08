@@ -5,7 +5,8 @@ import pydeck as pdk
 import altair as alt
 import datetime
 import time
-
+import sys
+import path
 #########################################################################################
 # Load data
 st.set_page_config(
@@ -14,8 +15,9 @@ st.set_page_config(
 )
 st.title('Plotting what is used in the LSTM Model')
 
-
-DATA_URL = ('../lstm_for_map.csv')
+dir = path.Path(__file__).abspath()
+sys.append.path(dir.parent.parent)
+DATA_URL = ('./lstm_for_map.csv')
 
 # st.write(df)
 ############################################################################################
