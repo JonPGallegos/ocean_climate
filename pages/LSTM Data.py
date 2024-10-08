@@ -8,10 +8,14 @@ import time
 
 #########################################################################################
 # Load data
-st.title('Argo Floats Across the World')
+st.set_page_config(
+    page_title="Map",
+    page_icon="👋",
+)
+st.title('Plotting what is used in the LSTM Model')
 
 
-DATA_URL = ('c:/Users/jonpg/OneDrive/Documents/School/Math 553/ocean_climate/lstm_for_map.csv')
+DATA_URL = ('lstm_for_map.csv')
 
 # st.write(df)
 ############################################################################################

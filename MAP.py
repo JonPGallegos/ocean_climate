@@ -8,10 +8,16 @@ import time
 
 #########################################################################################
 # Load data
+st.set_page_config(
+    page_title="Map",
+    page_icon="👋",
+)
+
+
 st.title('Argo Floats Across the World')
 #c:/Users/jonpg/onedrive/Documents/School/Math 553/ocean_climate/
 
-DATA_URL = ('data_for_map.csv')
+DATA_URL = ('data_for_map_2023.csv')
 
 # st.write(df)
 ############################################################################################
