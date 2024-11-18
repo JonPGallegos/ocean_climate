@@ -15,7 +15,7 @@ st.set_page_config(
 )
 st.title('Plotting what is used in the LSTM Model')
 
-DATA_URL = 'c:/Users/Jon/Documents/School/Math 553/Web App Local/pages/heatmap.csv'
+DATA_URL = 'c:/Users/jonpg/OneDrive/Documents/School/Math 553/Web App Local/pages/heatmap.csv'
 
 
 
@@ -30,7 +30,30 @@ def load_data_lstm():
 
 # Load rows of data into the dataframe.
 df_lstm = load_data_lstm()
-# Variable for date picker, default to Jan 1st 2020
+total = len(df_lstm)
+on = st.toggle("Find Best Fit", True)
+
+if on:
+    #max is worst so we need to inverse to put the best as the max
+    df_lstm.sort_values(by=['residual'], ascending=[False], inplace=True)
+    df_lstm['residual'] = df_lstm['residual'] ** -1
+else:
+    df_lstm.sort_values(by=['residual'], ascending=[True], inplace=True)
+    df_lstm['residual'] = df_lstm['residual'] ** 1
+
+
+
+lower, upper = st.slider("Select a percent range to include: ", 0, 100, (15, 85))
+lower = lower/100
+upper = upper/100
+
+
+
+
+
+df_lstm = df_lstm.iloc[round(lower*total):round(upper*total)]
+
+st.write(f"Count: {len(df_lstm)*100/total}%")
 
 # Set viewport for the deckgl map
 view = pdk.ViewState(latitude=0, longitude=0, zoom=0.2,)
@@ -63,27 +86,4 @@ subheading = st.subheader("")
 # Render the deck.gl map in the Streamlit app as a Pydeck chart 
 map = st.pydeck_chart(r)
 
-# index_range = 10
-# index = df_lstm.index.tolist()
-# table, act_start = stability_index[metric_to_show]
-# running_list = index[table:table+index_range]
-# Update the maps and the subheading each day for 90 days
-# for i in index[table:]:
-    
-#     # Update data in map layers
-#     covidLayer.data = df_lstm.loc[running_list]
-
-#     # Update the deck.gl map
-#     #r.update()
-
-#     # Render the map
-#     map.pydeck_chart(r)
-
-#     # Update the heading with current date
-#     subheading.subheader("Current Table Row Number: %s out of 681,540" % (act_start))
-#     temp_list = running_list[1:]
-#     temp_list.append(i)
-#     running_list = temp_list
-#     act_start+=1
-#     # wait 0.1 second before go onto next day
-#     time.sleep(0.05)
+st.table()
